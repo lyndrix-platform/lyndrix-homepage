@@ -1,0 +1,233 @@
+---
+import logo from '../assets/lyndrid_icons/icons/logo.svg';
+
+const columns = [
+	{
+		title: 'Framework',
+		links: [
+			{ label: 'Core', url: 'https://github.com/lyndrix-platform/lyndrix-core' },
+			{ label: 'Architecture', url: 'https://github.com/lyndrix-platform/lyndrix-core/blob/main/docs/architecture.md' },
+			{ label: 'Security', url: 'https://github.com/lyndrix-platform/lyndrix-core/blob/main/docs/security.md' },
+			{ label: 'Deployment', url: 'https://github.com/lyndrix-platform/lyndrix-core/blob/main/docs/deployment.md' },
+		],
+	},
+	{
+		title: 'Plugins',
+		links: [
+			{ label: 'Plugin Guide', url: 'https://github.com/lyndrix-platform/lyndrix-core/blob/main/docs/plugins.md' },
+			{ label: 'Ecosystem', url: 'https://github.com/lyndrix-platform/lyndrix-plugin-collection' },
+			{ label: 'Plugin Collection', url: 'https://github.com/lyndrix-platform/lyndrix-plugin-collection' },
+			{ label: 'Discord Notifier', url: 'https://github.com/lyndrix-platform/lyndrix-plugin-discord-notifier' },
+			{ label: 'Docker Manager', url: 'https://github.com/lyndrix-platform/lyndrix-plugin-docker-manager' },
+		],
+	},
+	{
+		title: 'Community',
+		links: [
+			{ label: 'GitHub Organization', url: 'https://github.com/lyndrix-platform' },
+			{ label: 'lyndrix-core', url: 'https://github.com/lyndrix-platform/lyndrix-core' },
+			{ label: 'Issues', url: 'https://github.com/lyndrix-platform/lyndrix-core/issues' },
+			{ label: 'Discussions', url: 'https://github.com/lyndrix-platform/lyndrix-core/discussions' },
+		],
+	},
+];
+---
+
+<footer class="footer">
+	<div class="footer-top">
+		<div class="footer-brand">
+			<a href="/" class="brand-link">
+				<img src={logo.src} alt="Lyndrix Logo" width="36" height="36" class="footer-logo" />
+				<span class="brand-name">Lyndrix</span>
+			</a>
+			<p class="brand-tagline">Secure by default.<br />Extensible by design.</p>
+			<a href="https://github.com/lyndrix-platform" class="github-link" target="_blank" rel="noopener noreferrer">
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+					<path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
+				</svg>
+				GitHub Organization
+			</a>
+		</div>
+
+		<div class="footer-links">
+			{columns.map((col) => (
+				<div class="footer-col">
+					<h4 class="col-title">{col.title}</h4>
+					<ul class="col-links">
+						{col.links.map((link) => (
+							<li>
+								<a href={link.url} target="_blank" rel="noopener noreferrer" class="col-link">
+									{link.label}
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			))}
+		</div>
+	</div>
+
+	<div class="footer-bottom">
+		<p class="copyright">© 2025 Lyndrix Platform · Apache 2.0 License</p>
+		<a href="https://lyndrix-platform.github.io/lyndrix-core/" class="docs-btn" target="_blank" rel="noopener noreferrer">
+			Full Documentation →
+		</a>
+	</div>
+</footer>
+
+<style>
+	.footer {
+		background: var(--bg-secondary);
+		border-top: 1px solid var(--border-card);
+	}
+
+	.footer-top {
+		max-width: var(--container-max);
+		margin: 0 auto;
+		padding: 4rem 1.5rem 3rem;
+		display: grid;
+		grid-template-columns: 280px 1fr;
+		gap: 4rem;
+	}
+
+	.footer-brand {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.brand-link {
+		display: flex;
+		align-items: center;
+		gap: 0.625rem;
+		text-decoration: none;
+		width: fit-content;
+	}
+
+	.footer-logo {
+		filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.4));
+	}
+
+	.brand-name {
+		font-size: 1.25rem;
+		font-weight: 700;
+		background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.brand-tagline {
+		font-size: 0.9rem;
+		color: var(--text-muted);
+		line-height: 1.6;
+	}
+
+	.github-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--text-secondary);
+		text-decoration: none;
+		padding: 0.45rem 0.875rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--border-card);
+		border-radius: var(--radius-sm);
+		width: fit-content;
+		transition: color var(--transition), border-color var(--transition), background var(--transition);
+	}
+
+	.github-link:hover {
+		color: var(--text-primary);
+		border-color: rgba(0, 212, 255, 0.25);
+		background: rgba(0, 212, 255, 0.08);
+	}
+
+	.footer-links {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2rem;
+	}
+
+	.footer-col {
+		display: flex;
+		flex-direction: column;
+		gap: 0.875rem;
+	}
+
+	.col-title {
+		font-size: 0.8rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--text-primary);
+	}
+
+	.col-links {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.col-link {
+		font-size: 0.875rem;
+		color: var(--text-muted);
+		text-decoration: none;
+		transition: color var(--transition);
+	}
+
+	.col-link:hover {
+		color: var(--accent-cyan);
+	}
+
+	.footer-bottom {
+		max-width: var(--container-max);
+		margin: 0 auto;
+		padding: 1.25rem 1.5rem;
+		border-top: 1px solid var(--border-card);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.copyright {
+		font-size: 0.82rem;
+		color: var(--text-muted);
+	}
+
+	.docs-btn {
+		font-size: 0.82rem;
+		font-weight: 600;
+		color: var(--accent-cyan);
+		text-decoration: none;
+		transition: opacity var(--transition);
+	}
+
+	.docs-btn:hover {
+		opacity: 0.8;
+	}
+
+	@media (max-width: 1024px) {
+		.footer-top {
+			grid-template-columns: 1fr;
+			gap: 2.5rem;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.footer-links {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 400px) {
+		.footer-links {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -2,22 +2,109 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Lyndrix — Build Applications with Plugins</title>
+		<meta name="description" content="Lyndrix is a secure, extensible application framework. Drop in a plugin and go — authentication, secrets, event bus, UI, and database are already there." />
+		<meta property="og:title" content="Lyndrix — Build Applications with Plugins" />
+		<meta property="og:description" content="Lyndrix is a secure, extensible application framework. Drop in a plugin and go." />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://lyndrix-platform.github.io/" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Lyndrix — Build Applications with Plugins" />
+		<meta name="twitter:description" content="Lyndrix is a secure, extensible application framework." />
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
 
-<style>
-	html,
-	body {
+<style is:global>
+	:root {
+		/* Colors */
+		--bg-primary: #0a0e1a;
+		--bg-secondary: #0f1629;
+		--bg-card: rgba(15, 22, 41, 0.8);
+		--accent-cyan: #00d4ff;
+		--accent-blue: #0ea5e9;
+		--accent-purple: #8b5cf6;
+		--text-primary: #f0f6ff;
+		--text-secondary: #94a3b8;
+		--text-muted: #64748b;
+		--border-color: rgba(0, 212, 255, 0.15);
+		--border-card: rgba(255, 255, 255, 0.08);
+		--glow-cyan: 0 0 30px rgba(0, 212, 255, 0.3);
+		--glow-blue: 0 0 30px rgba(14, 165, 233, 0.3);
+
+		/* Typography */
+		--font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		--font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+
+		/* Spacing */
+		--section-padding: 6rem 1.5rem;
+		--container-max: 1200px;
+
+		/* Radius */
+		--radius-sm: 6px;
+		--radius-md: 12px;
+		--radius-lg: 20px;
+
+		/* Transitions */
+		--transition: 0.2s ease;
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
 		margin: 0;
-		width: 100%;
-		height: 100%;
+		padding: 0;
+	}
+
+	html {
+		scroll-behavior: smooth;
+		font-size: 16px;
+	}
+
+	body {
+		font-family: var(--font-sans);
+		background-color: var(--bg-primary);
+		color: var(--text-primary);
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		overflow-x: hidden;
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	::selection {
+		background: rgba(0, 212, 255, 0.3);
+		color: var(--text-primary);
+	}
+
+	::-webkit-scrollbar {
+		width: 8px;
+	}
+	::-webkit-scrollbar-track {
+		background: var(--bg-primary);
+	}
+	::-webkit-scrollbar-thumb {
+		background: var(--border-color);
+		border-radius: 4px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--accent-cyan);
 	}
 </style>

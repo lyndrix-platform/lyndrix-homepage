@@ -1,0 +1,275 @@
+---
+const steps = [
+	{
+		number: '01',
+		title: 'Deploy Lyndrix Core',
+		description: 'Run with Docker. Vault, database, and the full runtime are ready in minutes. No manual configuration — Lyndrix bootstraps itself.',
+	},
+	{
+		number: '02',
+		title: 'Write Your Plugin',
+		description: 'Create <code>entrypoint.py</code> with a <code>manifest</code> and <code>setup(ctx)</code> function. Import from <code>core.api</code>. That\'s the entire contract.',
+	},
+	{
+		number: '03',
+		title: 'Install from GitHub',
+		description: 'Point Lyndrix at your plugin repo with a version tag. It downloads, validates, installs dependencies, and activates — automatically.',
+	},
+	{
+		number: '04',
+		title: "You're Done",
+		description: 'Your plugin is live. Users can manage it from the built-in Plugin Manager UI. No restarts, no manual wiring.',
+	},
+];
+
+const codeSnippet = `from core.api import ModuleManifest
+from nicegui import ui
+
+manifest = ModuleManifest(
+    id="lyndrix.plugin.myapp",
+    name="My App",
+    version="1.0.0",
+    type="PLUGIN",
+    ui_route="/myapp",
+    permissions={
+        "subscribe": ["system:boot_complete"],
+        "emit": [],
+    },
+)
+
+async def setup(ctx):
+    @ui.page('/myapp')
+    async def page():
+        ui.label('Hello from my plugin!')`;
+---
+
+<section class="how-it-works" id="how-it-works">
+	<div class="hiw-container">
+		<div class="section-header">
+			<span class="section-tag">Simple by design</span>
+			<h2 class="section-title">How it works</h2>
+			<p class="section-subtitle">
+				From zero to a production-ready managed application in four steps.
+			</p>
+		</div>
+
+		<div class="hiw-content">
+			<div class="steps">
+				{steps.map((step) => (
+					<div class="step">
+						<div class="step-number">{step.number}</div>
+						<div class="step-body">
+							<h3 class="step-title">{step.title}</h3>
+							<p class="step-description" set:html={step.description}></p>
+						</div>
+					</div>
+				))}
+			</div>
+
+			<div class="code-panel">
+				<div class="code-header">
+					<div class="code-dots">
+						<span class="dot dot-red"></span>
+						<span class="dot dot-yellow"></span>
+						<span class="dot dot-green"></span>
+					</div>
+					<span class="code-filename">entrypoint.py</span>
+					<span class="code-lang">Python</span>
+				</div>
+				<pre class="code-block"><code>{codeSnippet}</code></pre>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.how-it-works {
+		padding: var(--section-padding);
+		background: var(--bg-primary);
+		position: relative;
+	}
+
+	.hiw-container {
+		max-width: var(--container-max);
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 4rem;
+	}
+
+	.section-header {
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.section-tag {
+		display: inline-block;
+		padding: 0.3rem 0.875rem;
+		background: rgba(0, 212, 255, 0.1);
+		border: 1px solid rgba(0, 212, 255, 0.2);
+		border-radius: 999px;
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--accent-cyan);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 4vw, 3rem);
+		font-weight: 800;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--text-primary);
+	}
+
+	.section-subtitle {
+		font-size: 1.1rem;
+		color: var(--text-secondary);
+		max-width: 560px;
+		line-height: 1.7;
+	}
+
+	.hiw-content {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		align-items: start;
+	}
+
+	.steps {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.step {
+		display: flex;
+		gap: 1.5rem;
+		padding: 1.75rem 0;
+		border-bottom: 1px solid var(--border-card);
+		position: relative;
+	}
+
+	.step:last-child {
+		border-bottom: none;
+	}
+
+	.step-number {
+		font-size: 2.5rem;
+		font-weight: 800;
+		font-family: var(--font-mono);
+		color: rgba(0, 212, 255, 0.15);
+		line-height: 1;
+		flex-shrink: 0;
+		width: 3rem;
+		transition: color var(--transition);
+	}
+
+	.step:hover .step-number {
+		color: var(--accent-cyan);
+	}
+
+	.step-body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding-top: 0.25rem;
+	}
+
+	.step-title {
+		font-size: 1.1rem;
+		font-weight: 700;
+		color: var(--text-primary);
+	}
+
+	.step-description {
+		font-size: 0.92rem;
+		color: var(--text-secondary);
+		line-height: 1.7;
+	}
+
+	.step-description :global(code) {
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	/* Code panel */
+	.code-panel {
+		background: #0d1117;
+		border: 1px solid var(--border-card);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+		position: sticky;
+		top: 6rem;
+	}
+
+	.code-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1.25rem;
+		background: #161b22;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.code-dots {
+		display: flex;
+		gap: 5px;
+	}
+
+	.dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+	}
+	.dot-red { background: #ff5f57; }
+	.dot-yellow { background: #ffbd2e; }
+	.dot-green { background: #28c840; }
+
+	.code-filename {
+		flex: 1;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-secondary);
+	}
+
+	.code-lang {
+		font-size: 0.75rem;
+		padding: 0.2rem 0.5rem;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		border-radius: 4px;
+		font-weight: 600;
+	}
+
+	.code-block {
+		margin: 0;
+		padding: 1.5rem;
+		overflow-x: auto;
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		line-height: 1.7;
+		color: #e6edf3;
+		white-space: pre;
+	}
+
+	@media (max-width: 1024px) {
+		.hiw-content {
+			grid-template-columns: 1fr;
+			gap: 3rem;
+		}
+
+		.code-panel {
+			position: static;
+		}
+	}
+</style>
