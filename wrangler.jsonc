@@ -1,6 +1,6 @@
 {
-  "name": "<WORKER_NAME>",
-  "compatibility_date": "<COMPATIBILITY_DATE>",
+  "name": "lyndrix-homepage",
+  "compatibility_date": "2026-05-23",
   "compatibility_flags": [
     "nodejs_compat"
   ],
