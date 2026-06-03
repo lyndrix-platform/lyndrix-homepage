@@ -61,10 +61,10 @@ manifest = ModuleManifest(
     version=<span class="str">"1.0.0"</span>,
     type=<span class="str">"PLUGIN"</span>,
     ui_route=<span class="str">"/myapp"</span>,
-    permissions={
+    permissions=&#123;
         <span class="str">"subscribe"</span>: [<span class="str">"system:boot_complete"</span>],
         <span class="str">"emit"</span>: [<span class="str">"myapp:event"</span>],
-    },
+    &#125;,
 )
 
 <span class="kw">async def</span> <span class="fn">setup</span>(ctx):
@@ -80,7 +80,7 @@ manifest = ModuleManifest(
 
 <span class="kw">async def</span> <span class="fn">health_check</span>():
     <span class="comment"># Required: platform polls this on /api/health</span>
-    <span class="kw">return</span> {<span class="str">"status"</span>: <span class="str">"ok"</span>, <span class="str">"version"</span>: manifest.version}</code></pre>
+    <span class="kw">return</span> &#123;<span class="str">"status"</span>: <span class="str">"ok"</span>, <span class="str">"version"</span>: manifest.version&#125;</code></pre>
 				</div>
 			</div>
 		</div>
@@ -287,24 +287,24 @@ manifest = ModuleManifest(
 							<span class="code-filename">GET /api/health</span>
 							<span class="code-lang">JSON</span>
 						</div>
-						<pre class="code-block"><code>{
+						<pre class="code-block"><code>&#123;
   <span class="str">"status"</span>: <span class="str">"ok"</span>,
   <span class="str">"core_version"</span>: <span class="str">"0.3.0"</span>,
   <span class="str">"vault"</span>: <span class="str">"ready"</span>,
-  <span class="str">"plugins"</span>: {
-    <span class="str">"lyndrix.plugin.myapp"</span>: {
+  <span class="str">"plugins"</span>: &#123;
+    <span class="str">"lyndrix.plugin.myapp"</span>: &#123;
       <span class="str">"status"</span>: <span class="str">"ok"</span>,
       <span class="str">"version"</span>: <span class="str">"1.0.0"</span>,
       <span class="str">"last_sync"</span>: <span class="str">"2026-06-03T12:00:00Z"</span>
-    },
-    <span class="str">"lyndrix.plugin.iac"</span>: {
+    &#125;,
+    <span class="str">"lyndrix.plugin.iac"</span>: &#123;
       <span class="str">"status"</span>: <span class="str">"ok"</span>,
       <span class="str">"version"</span>: <span class="str">"0.3.0"</span>,
       <span class="str">"runners"</span>: 3,
       <span class="str">"jobs_running"</span>: 1
-    }
-  }
-}</code></pre>
+    &#125;
+  &#125;
+&#125;</code></pre>
 					</div>
 				</div>
 			</div>
@@ -403,7 +403,7 @@ manifest = ModuleManifest(
 <span class="kw">async def</span> <span class="fn">deploy</span>(service: str):
     ctx.emit(
         <span class="str">"iac:deploy_requested"</span>,
-        {<span class="str">"service"</span>: service, <span class="str">"env"</span>: <span class="str">"prod"</span>}
+        &#123;<span class="str">"service"</span>: service, <span class="str">"env"</span>: <span class="str">"prod"</span>&#125;
     )</code></pre>
 					</div>
 					<div class="code-panel">
