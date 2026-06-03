@@ -1,0 +1,1337 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Plugin Development — Lyndrix" description="Build powerful plugins for Lyndrix. Learn the plugin contract, ctx API, event bus, health checks, and deploy your first plugin in minutes.">
+	<Navbar />
+
+	<!-- ─── HERO ────────────────────────────────────────────────────── -->
+	<section class="plugin-hero">
+		<div class="hero-bg">
+			<div class="hero-grid"></div>
+			<div class="hero-glow hero-glow-1"></div>
+			<div class="hero-glow hero-glow-2"></div>
+		</div>
+
+		<div class="hero-container">
+			<div class="hero-content">
+				<div class="hero-badge">
+					<span class="badge-dot"></span>
+					Plugin SDK · Python · Open Source
+				</div>
+
+				<h1 class="hero-title">
+					Write once.<br />
+					<span class="hero-title-accent">Deploy everywhere.</span>
+				</h1>
+
+				<p class="hero-subtitle">
+					Lyndrix plugins are self-contained Python packages. One <code>setup(ctx)</code> function and you get auth, secrets, a database, an event bus, and a live UI — all wired in by the platform.
+				</p>
+
+				<div class="hero-actions">
+					<a href="https://docs.lyndrix.eu/plugins/" class="btn-primary" target="_blank" rel="noopener noreferrer">
+						Read the Docs →
+					</a>
+					<a href="https://github.com/lyndrix-platform/lyndrix-plugin-collection" class="btn-secondary" target="_blank" rel="noopener noreferrer">
+						Browse Plugins
+					</a>
+				</div>
+			</div>
+
+			<div class="hero-code">
+				<div class="code-panel">
+					<div class="code-header">
+						<div class="code-dots">
+							<span class="dot dot-red"></span>
+							<span class="dot dot-yellow"></span>
+							<span class="dot dot-green"></span>
+						</div>
+						<span class="code-filename">entrypoint.py</span>
+						<span class="code-lang">Python</span>
+					</div>
+					<pre class="code-block"><code><span class="kw">from</span> <span class="mod">core.api</span> <span class="kw">import</span> ModuleManifest
+<span class="kw">from</span> <span class="mod">nicegui</span> <span class="kw">import</span> ui
+
+manifest = ModuleManifest(
+    id=<span class="str">"lyndrix.plugin.myapp"</span>,
+    name=<span class="str">"My App"</span>,
+    version=<span class="str">"1.0.0"</span>,
+    type=<span class="str">"PLUGIN"</span>,
+    ui_route=<span class="str">"/myapp"</span>,
+    permissions={
+        <span class="str">"subscribe"</span>: [<span class="str">"system:boot_complete"</span>],
+        <span class="str">"emit"</span>: [<span class="str">"myapp:event"</span>],
+    },
+)
+
+<span class="kw">async def</span> <span class="fn">setup</span>(ctx):
+    <span class="comment"># Vault-backed config, auto-decrypted</span>
+    token = <span class="kw">await</span> ctx.get_secret(<span class="str">"my_api_token"</span>)
+
+    <span class="comment"># Subscribe to platform events</span>
+    <span class="kw">await</span> ctx.subscribe(<span class="str">"system:boot_complete"</span>, on_boot)
+
+    <span class="comment"># Register a UI route + settings panel</span>
+    ctx.register_routes(router)
+    ctx.register_settings_panel(render_settings)
+
+<span class="kw">async def</span> <span class="fn">health_check</span>():
+    <span class="comment"># Required: platform polls this on /api/health</span>
+    <span class="kw">return</span> {<span class="str">"status"</span>: <span class="str">"ok"</span>, <span class="str">"version"</span>: manifest.version}</code></pre>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── WHAT YOU GET ────────────────────────────────────────────── -->
+	<section class="section ctx-section" id="ctx-api">
+		<div class="section-container">
+			<div class="section-header">
+				<span class="section-tag">The Context API</span>
+				<h2 class="section-title">Everything wired.<br />Zero boilerplate.</h2>
+				<p class="section-subtitle">
+					The <code>ctx</code> object passed to <code>setup()</code> is your gateway to every Lyndrix subsystem. No imports, no singletons — just call it.
+				</p>
+			</div>
+
+			<div class="ctx-grid">
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>Secrets & Config</h3>
+						<p>Read and write Vault-backed secrets scoped to your plugin. No token management.</p>
+						<code>ctx.get_secret("key")</code>
+					</div>
+				</div>
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>Event Bus</h3>
+						<p>Subscribe and emit typed events across the entire platform. Decoupled by default.</p>
+						<code>ctx.subscribe("topic", handler)</code>
+					</div>
+				</div>
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>Database</h3>
+						<p>SQLAlchemy-backed sessions shared with the platform. Your models, no setup.</p>
+						<code>ctx.get_db_session()</code>
+					</div>
+				</div>
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>UI & Routes</h3>
+						<p>Register FastAPI routers and NiceGUI pages. Your plugin owns its URL namespace.</p>
+						<code>ctx.register_routes(router)</code>
+					</div>
+				</div>
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>Notifications</h3>
+						<p>Send real-time in-app toasts and persistent bell notifications with a single call.</p>
+						<code>ctx.notify("msg", type="info")</code>
+					</div>
+				</div>
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>Permissions</h3>
+						<p>Declare which events you emit or subscribe to. The platform enforces boundaries at runtime.</p>
+						<code>manifest.permissions</code>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── PLUGIN ANATOMY ──────────────────────────────────────────── -->
+	<section class="section anatomy-section" id="anatomy">
+		<div class="section-container">
+			<div class="section-header">
+				<span class="section-tag">Plugin Structure</span>
+				<h2 class="section-title">Anatomy of a plugin</h2>
+				<p class="section-subtitle">
+					A Lyndrix plugin is just a directory. Lyndrix discovers it, validates the manifest, installs dependencies, and calls <code>setup(ctx)</code>.
+				</p>
+			</div>
+
+			<div class="anatomy-layout">
+				<div class="file-tree-panel">
+					<div class="code-panel">
+						<div class="code-header">
+							<div class="code-dots">
+								<span class="dot dot-red"></span>
+								<span class="dot dot-yellow"></span>
+								<span class="dot dot-green"></span>
+							</div>
+							<span class="code-filename">lyndrix-plugin-myapp/</span>
+						</div>
+						<pre class="code-block file-tree"><code><span class="tree-dir">lyndrix-plugin-myapp/</span>
+<span class="tree-line">├── </span><span class="tree-required">entrypoint.py</span>      <span class="tree-comment"># manifest + setup(ctx)</span>
+<span class="tree-line">├── </span><span class="tree-file">requirements.txt</span>   <span class="tree-comment"># plugin dependencies</span>
+<span class="tree-line">├── </span><span class="tree-dir">app/</span>
+<span class="tree-line">│   ├── </span><span class="tree-file">controller/</span>    <span class="tree-comment"># FastAPI routers</span>
+<span class="tree-line">│   ├── </span><span class="tree-file">model/</span>         <span class="tree-comment"># SQLAlchemy models</span>
+<span class="tree-line">│   ├── </span><span class="tree-file">ui/</span>            <span class="tree-comment"># NiceGUI pages</span>
+<span class="tree-line">│   └── </span><span class="tree-file">logic/</span>         <span class="tree-comment"># Business logic</span>
+<span class="tree-line">└── </span><span class="tree-file">vendor/</span>            <span class="tree-comment"># Auto-installed deps</span></code></pre>
+					</div>
+
+					<div class="anatomy-callout">
+						<div class="callout-icon">
+							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+						</div>
+						<p>Lyndrix auto-installs <code>requirements.txt</code> into <code>vendor/</code> at load time — fully isolated from the core and other plugins.</p>
+					</div>
+				</div>
+
+				<div class="anatomy-steps">
+					<div class="anatomy-step">
+						<div class="step-num">01</div>
+						<div class="step-content">
+							<h3>Declare the manifest</h3>
+							<p>The <code>ModuleManifest</code> describes your plugin's identity, version, UI route, and event permissions. It's the source of truth the platform reads on load.</p>
+						</div>
+					</div>
+					<div class="anatomy-step">
+						<div class="step-num">02</div>
+						<div class="step-content">
+							<h3>Implement <code>setup(ctx)</code></h3>
+							<p>This async function runs once after the platform is ready. Wire up your routes, subscribe to events, load secrets, and register any UI panels here.</p>
+						</div>
+					</div>
+					<div class="anatomy-step">
+						<div class="step-num">03</div>
+						<div class="step-content">
+							<h3>Implement <code>health_check()</code></h3>
+							<p>This async function is called by the platform's global <code>/api/health</code> endpoint. Return a dict with at minimum a <code>status</code> field so Lyndrix can surface your plugin's live state.</p>
+						</div>
+					</div>
+					<div class="anatomy-step">
+						<div class="step-num">04</div>
+						<div class="step-content">
+							<h3>Push and install</h3>
+							<p>Tag a release on GitHub. In the Lyndrix Plugin Manager, paste the repo URL. The platform clones, validates, installs dependencies, and activates — no restarts needed.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── HEALTH CHECK ────────────────────────────────────────────── -->
+	<section class="section health-section" id="health">
+		<div class="section-container">
+			<div class="health-layout">
+				<div class="health-content">
+					<span class="section-tag">Platform Contract</span>
+					<h2 class="health-title">Built-in health checks</h2>
+					<p class="health-desc">
+						Every plugin must expose an async <code>health_check()</code> function. Lyndrix aggregates all plugin health responses into a single <code>/api/health</code> endpoint — giving you one unified status view for your entire application.
+					</p>
+
+					<ul class="health-list">
+						<li>
+							<span class="health-check-icon">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+							</span>
+							Aggregated automatically — no registration required
+						</li>
+						<li>
+							<span class="health-check-icon">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+							</span>
+							Return any additional fields — service URLs, queue depths, last sync
+						</li>
+						<li>
+							<span class="health-check-icon">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+							</span>
+							Caught exceptions map to <code>"status": "error"</code> automatically
+						</li>
+						<li>
+							<span class="health-check-icon">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+							</span>
+							Surfaced in the Lyndrix dashboard and the API response
+						</li>
+					</ul>
+				</div>
+
+				<div class="health-code">
+					<div class="code-panel">
+						<div class="code-header">
+							<div class="code-dots">
+								<span class="dot dot-red"></span>
+								<span class="dot dot-yellow"></span>
+								<span class="dot dot-green"></span>
+							</div>
+							<span class="code-filename">GET /api/health</span>
+							<span class="code-lang">JSON</span>
+						</div>
+						<pre class="code-block"><code>{
+  <span class="str">"status"</span>: <span class="str">"ok"</span>,
+  <span class="str">"core_version"</span>: <span class="str">"0.3.0"</span>,
+  <span class="str">"vault"</span>: <span class="str">"ready"</span>,
+  <span class="str">"plugins"</span>: {
+    <span class="str">"lyndrix.plugin.myapp"</span>: {
+      <span class="str">"status"</span>: <span class="str">"ok"</span>,
+      <span class="str">"version"</span>: <span class="str">"1.0.0"</span>,
+      <span class="str">"last_sync"</span>: <span class="str">"2026-06-03T12:00:00Z"</span>
+    },
+    <span class="str">"lyndrix.plugin.iac"</span>: {
+      <span class="str">"status"</span>: <span class="str">"ok"</span>,
+      <span class="str">"version"</span>: <span class="str">"0.3.0"</span>,
+      <span class="str">"runners"</span>: 3,
+      <span class="str">"jobs_running"</span>: 1
+    }
+  }
+}</code></pre>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── LIFECYCLE ───────────────────────────────────────────────── -->
+	<section class="section lifecycle-section" id="lifecycle">
+		<div class="section-container">
+			<div class="section-header">
+				<span class="section-tag">Lifecycle</span>
+				<h2 class="section-title">How a plugin boots</h2>
+				<p class="section-subtitle">
+					Lyndrix follows a strict boot order. Your plugin is loaded only after Vault, the database, and IAM are all online.
+				</p>
+			</div>
+
+			<div class="timeline">
+				<div class="timeline-item">
+					<div class="timeline-node node-core">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+					</div>
+					<div class="timeline-content">
+						<h4>Vault unsealed</h4>
+						<p>HashiCorp Vault is initialized and opened. Secrets are available.</p>
+					</div>
+				</div>
+				<div class="timeline-connector"></div>
+				<div class="timeline-item">
+					<div class="timeline-node node-core">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+					</div>
+					<div class="timeline-content">
+						<h4>Database ready</h4>
+						<p>Migrations applied. Shared DB session pool is open.</p>
+					</div>
+				</div>
+				<div class="timeline-connector"></div>
+				<div class="timeline-item">
+					<div class="timeline-node node-core">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+					</div>
+					<div class="timeline-content">
+						<h4>IAM online</h4>
+						<p>Auth providers loaded. Emits <code>iam:ready</code> → triggers plugin loader.</p>
+					</div>
+				</div>
+				<div class="timeline-connector timeline-connector-plugin"></div>
+				<div class="timeline-item">
+					<div class="timeline-node node-plugin">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+					</div>
+					<div class="timeline-content">
+						<h4>Plugins loaded</h4>
+						<p>Manifest validated, <code>vendor/</code> installed, <code>setup(ctx)</code> called for each plugin.</p>
+					</div>
+				</div>
+				<div class="timeline-connector"></div>
+				<div class="timeline-item">
+					<div class="timeline-node node-plugin">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+					</div>
+					<div class="timeline-content">
+						<h4><code>system:boot_complete</code></h4>
+						<p>All plugins are live. Background tasks, timers, and event handlers are active.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── EVENT BUS DEEP DIVE ─────────────────────────────────────── -->
+	<section class="section events-section" id="events">
+		<div class="section-container">
+			<div class="section-header">
+				<span class="section-tag">Event-Driven</span>
+				<h2 class="section-title">Talk through the bus.</h2>
+				<p class="section-subtitle">
+					Plugins never import each other. All inter-plugin communication happens through typed events on the global bus — declared in the manifest, enforced at runtime.
+				</p>
+			</div>
+
+			<div class="events-grid">
+				<div class="events-code">
+					<div class="code-panel">
+						<div class="code-header">
+							<div class="code-dots">
+								<span class="dot dot-red"></span>
+								<span class="dot dot-yellow"></span>
+								<span class="dot dot-green"></span>
+							</div>
+							<span class="code-filename">plugin_a — emits events</span>
+							<span class="code-lang">Python</span>
+						</div>
+						<pre class="code-block"><code><span class="comment"># Plugin A: triggers a deployment</span>
+<span class="kw">async def</span> <span class="fn">deploy</span>(service: str):
+    ctx.emit(
+        <span class="str">"iac:deploy_requested"</span>,
+        {<span class="str">"service"</span>: service, <span class="str">"env"</span>: <span class="str">"prod"</span>}
+    )</code></pre>
+					</div>
+					<div class="code-panel">
+						<div class="code-header">
+							<div class="code-dots">
+								<span class="dot dot-red"></span>
+								<span class="dot dot-yellow"></span>
+								<span class="dot dot-green"></span>
+							</div>
+							<span class="code-filename">plugin_b — reacts to events</span>
+							<span class="code-lang">Python</span>
+						</div>
+						<pre class="code-block"><code><span class="comment"># Plugin B: handles the deployment</span>
+<span class="kw">async def</span> <span class="fn">setup</span>(ctx):
+    <span class="kw">await</span> ctx.subscribe(
+        <span class="str">"iac:deploy_requested"</span>,
+        handle_deploy
+    )
+
+<span class="kw">async def</span> <span class="fn">handle_deploy</span>(payload):
+    service = payload[<span class="str">"service"</span>]
+    <span class="comment"># ... run pipeline</span></code></pre>
+					</div>
+				</div>
+
+				<div class="events-topics">
+					<h3 class="topics-title">Platform-native topics</h3>
+					<p class="topics-desc">These events are emitted by Lyndrix Core — subscribe to them without needing special permissions.</p>
+					<div class="topic-list">
+						<div class="topic-item"><code>system:boot_complete</code><span>Platform fully booted</span></div>
+						<div class="topic-item"><code>system:boot_phase</code><span>Boot phase changed</span></div>
+						<div class="topic-item"><code>vault:opened</code><span>Vault unsealed and ready</span></div>
+						<div class="topic-item"><code>vault:ready_for_data</code><span>Safe to read secrets</span></div>
+						<div class="topic-item"><code>iam:ready</code><span>Auth providers loaded</span></div>
+						<div class="topic-item"><code>system:maintenance_mode</code><span>Maintenance toggled</span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── GET STARTED ─────────────────────────────────────────────── -->
+	<section class="section start-section" id="get-started">
+		<div class="section-container">
+			<div class="start-card">
+				<div class="start-glow"></div>
+				<div class="start-content">
+					<h2 class="start-title">Ready to build?</h2>
+					<p class="start-subtitle">
+						Clone the plugin template, implement your <code>setup(ctx)</code>, push a tag — and your plugin is live on Lyndrix in minutes.
+					</p>
+					<div class="start-actions">
+						<a href="https://docs.lyndrix.eu/plugins/" class="btn-primary" target="_blank" rel="noopener noreferrer">
+							Plugin Docs →
+						</a>
+						<a href="https://github.com/lyndrix-platform" class="btn-secondary" target="_blank" rel="noopener noreferrer">
+							GitHub Organization
+						</a>
+					</div>
+				</div>
+				<div class="start-terminal">
+					<div class="code-panel">
+						<div class="code-header">
+							<div class="code-dots">
+								<span class="dot dot-red"></span>
+								<span class="dot dot-yellow"></span>
+								<span class="dot dot-green"></span>
+							</div>
+							<span class="code-filename">terminal</span>
+						</div>
+						<pre class="code-block"><code><span class="tree-comment"># Clone the plugin template</span>
+<span class="kw">$</span> git clone https://github.com/lyndrix-platform/\
+    lyndrix-plugin-template my-plugin
+
+<span class="tree-comment"># Develop locally (bind-mounted into core)</span>
+<span class="kw">$</span> docker compose up lyndrix-core-dev
+
+<span class="tree-comment"># Tag and release</span>
+<span class="kw">$</span> git tag v1.0.0 && git push --tags</code></pre>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<Footer />
+</Layout>
+
+<style>
+	/* ── Shared section styles ─────────────────────────────────────── */
+	.section {
+		padding: var(--section-padding);
+	}
+
+	.section-container {
+		max-width: var(--container-max);
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 4rem;
+	}
+
+	.section-header {
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.section-tag {
+		display: inline-block;
+		padding: 0.3rem 0.875rem;
+		background: rgba(0, 212, 255, 0.1);
+		border: 1px solid rgba(0, 212, 255, 0.2);
+		border-radius: 999px;
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--accent-cyan);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 4vw, 3rem);
+		font-weight: 800;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--text-primary);
+	}
+
+	.section-subtitle {
+		font-size: 1.1rem;
+		color: var(--text-secondary);
+		max-width: 560px;
+		line-height: 1.7;
+	}
+
+	.section-subtitle code,
+	.section-subtitle :global(code) {
+		font-family: var(--font-mono);
+		font-size: 0.88em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	/* ── Code panels ───────────────────────────────────────────────── */
+	.code-panel {
+		background: #0d1117;
+		border: 1px solid var(--border-card);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+	}
+
+	.code-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1.25rem;
+		background: #161b22;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.code-dots { display: flex; gap: 5px; }
+	.dot { width: 10px; height: 10px; border-radius: 50%; }
+	.dot-red    { background: #ff5f57; }
+	.dot-yellow { background: #ffbd2e; }
+	.dot-green  { background: #28c840; }
+
+	.code-filename {
+		flex: 1;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-secondary);
+	}
+
+	.code-lang {
+		font-size: 0.75rem;
+		padding: 0.2rem 0.5rem;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		border-radius: 4px;
+		font-weight: 600;
+	}
+
+	.code-block {
+		margin: 0;
+		padding: 1.5rem;
+		overflow-x: auto;
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		line-height: 1.75;
+		color: #e6edf3;
+		white-space: pre;
+	}
+
+	/* syntax pseudo-highlight */
+	.kw   { color: #ff7b72; }
+	.fn   { color: #d2a8ff; }
+	.mod  { color: #79c0ff; }
+	.str  { color: #a5d6ff; }
+	.comment { color: #8b949e; font-style: italic; }
+
+	/* ── Buttons ───────────────────────────────────────────────────── */
+	.btn-primary {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.75rem 1.75rem;
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--bg-primary);
+		background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		transition: opacity var(--transition), box-shadow var(--transition), transform var(--transition);
+	}
+	.btn-primary:hover {
+		opacity: 0.9;
+		box-shadow: var(--glow-cyan);
+		transform: translateY(-2px);
+	}
+
+	.btn-secondary {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.75rem 1.75rem;
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		background: rgba(255, 255, 255, 0.06);
+		border: 1px solid var(--border-card);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		transition: background var(--transition), border-color var(--transition), transform var(--transition);
+	}
+	.btn-secondary:hover {
+		background: rgba(255, 255, 255, 0.1);
+		border-color: rgba(0, 212, 255, 0.3);
+		transform: translateY(-2px);
+	}
+
+	/* ═══════════════════════════════════════════════════════════════
+	   HERO
+	═══════════════════════════════════════════════════════════════ */
+	.plugin-hero {
+		position: relative;
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+		padding-top: 5rem;
+	}
+
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+	}
+
+	.hero-grid {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+		background-size: 40px 40px;
+		mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+	}
+
+	.hero-glow {
+		position: absolute;
+		border-radius: 50%;
+		filter: blur(80px);
+		opacity: 0.4;
+	}
+
+	.hero-glow-1 {
+		width: 600px;
+		height: 600px;
+		background: radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent 70%);
+		top: -100px;
+		right: -100px;
+		animation: float 8s ease-in-out infinite;
+	}
+
+	.hero-glow-2 {
+		width: 400px;
+		height: 400px;
+		background: radial-gradient(circle, rgba(0, 212, 255, 0.15), transparent 70%);
+		bottom: 50px;
+		left: -100px;
+		animation: float 10s ease-in-out infinite reverse;
+	}
+
+	@keyframes float {
+		0%, 100% { transform: translateY(0px); }
+		50% { transform: translateY(-20px); }
+	}
+
+	.hero-container {
+		position: relative;
+		z-index: 1;
+		max-width: var(--container-max);
+		margin: 0 auto;
+		padding: 4rem 1.5rem;
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: 4rem;
+		align-items: center;
+		width: 100%;
+	}
+
+	.hero-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.hero-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.375rem 0.875rem;
+		background: rgba(139, 92, 246, 0.12);
+		border: 1px solid rgba(139, 92, 246, 0.25);
+		border-radius: 999px;
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--accent-purple);
+		width: fit-content;
+	}
+
+	.badge-dot {
+		width: 6px;
+		height: 6px;
+		background: var(--accent-purple);
+		border-radius: 50%;
+		animation: pulse 2s ease-in-out infinite;
+	}
+
+	@keyframes pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.4; }
+	}
+
+	.hero-title {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		font-weight: 800;
+		line-height: 1.1;
+		letter-spacing: -0.03em;
+		color: var(--text-primary);
+	}
+
+	.hero-title-accent {
+		background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.hero-subtitle {
+		font-size: 1.1rem;
+		line-height: 1.7;
+		color: var(--text-secondary);
+		max-width: 520px;
+	}
+
+	.hero-subtitle code {
+		font-family: var(--font-mono);
+		font-size: 0.88em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	.hero-actions {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════
+	   CTX GRID
+	═══════════════════════════════════════════════════════════════ */
+	.ctx-section {
+		background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%);
+		position: relative;
+	}
+
+	.ctx-section::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(0, 212, 255, 0.02) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(0, 212, 255, 0.02) 1px, transparent 1px);
+		background-size: 60px 60px;
+	}
+
+	.ctx-section .section-container {
+		position: relative;
+	}
+
+	.ctx-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	.ctx-card {
+		background: var(--bg-card);
+		border: 1px solid var(--border-card);
+		border-radius: var(--radius-lg);
+		padding: 1.75rem;
+		display: flex;
+		gap: 1.25rem;
+		align-items: flex-start;
+		backdrop-filter: blur(8px);
+		transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+	}
+
+	.ctx-card:hover {
+		border-color: rgba(0, 212, 255, 0.3);
+		transform: translateY(-3px);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	}
+
+	.ctx-icon {
+		width: 42px;
+		height: 42px;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 212, 255, 0.1);
+		border-radius: var(--radius-md);
+		color: var(--accent-cyan);
+	}
+
+	.ctx-body h3 {
+		font-size: 1rem;
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: 0.4rem;
+	}
+
+	.ctx-body p {
+		font-size: 0.88rem;
+		color: var(--text-secondary);
+		line-height: 1.6;
+		margin-bottom: 0.75rem;
+	}
+
+	.ctx-body code {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.25em 0.6em;
+		border-radius: 4px;
+		display: inline-block;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════
+	   ANATOMY
+	═══════════════════════════════════════════════════════════════ */
+	.anatomy-section {
+		background: var(--bg-primary);
+	}
+
+	.anatomy-layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		align-items: start;
+	}
+
+	.file-tree-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		position: sticky;
+		top: 6rem;
+	}
+
+	.file-tree {
+		font-family: var(--font-mono);
+	}
+
+	.tree-dir   { color: #79c0ff; }
+	.tree-file  { color: #e6edf3; }
+	.tree-required { color: var(--accent-cyan); font-weight: 600; }
+	.tree-comment  { color: #8b949e; font-style: italic; }
+	.tree-line  { color: #484f58; }
+
+	.anatomy-callout {
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+		padding: 1.25rem 1.5rem;
+		background: rgba(0, 212, 255, 0.06);
+		border: 1px solid rgba(0, 212, 255, 0.2);
+		border-radius: var(--radius-md);
+		color: var(--text-secondary);
+		font-size: 0.9rem;
+		line-height: 1.6;
+	}
+
+	.callout-icon {
+		flex-shrink: 0;
+		color: var(--accent-cyan);
+		margin-top: 1px;
+	}
+
+	.anatomy-callout code {
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	.anatomy-steps {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.anatomy-step {
+		display: flex;
+		gap: 1.5rem;
+		padding: 1.75rem 0;
+		border-bottom: 1px solid var(--border-card);
+	}
+
+	.anatomy-step:last-child {
+		border-bottom: none;
+	}
+
+	.step-num {
+		font-size: 2.25rem;
+		font-weight: 800;
+		font-family: var(--font-mono);
+		color: rgba(139, 92, 246, 0.15);
+		line-height: 1;
+		flex-shrink: 0;
+		width: 3rem;
+		transition: color var(--transition);
+	}
+
+	.anatomy-step:hover .step-num {
+		color: var(--accent-purple);
+	}
+
+	.step-content h3 {
+		font-size: 1.05rem;
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: 0.5rem;
+	}
+
+	.step-content h3 code {
+		font-family: var(--font-mono);
+		font-size: 0.9em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	.step-content p {
+		font-size: 0.92rem;
+		color: var(--text-secondary);
+		line-height: 1.7;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════
+	   HEALTH CHECK
+	═══════════════════════════════════════════════════════════════ */
+	.health-section {
+		background: linear-gradient(180deg, var(--bg-primary), var(--bg-secondary) 60%, var(--bg-primary));
+	}
+
+	.health-layout {
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: 5rem;
+		align-items: center;
+	}
+
+	.health-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.health-title {
+		font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+		font-weight: 800;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--text-primary);
+	}
+
+	.health-desc {
+		font-size: 1rem;
+		color: var(--text-secondary);
+		line-height: 1.75;
+	}
+
+	.health-desc code {
+		font-family: var(--font-mono);
+		font-size: 0.88em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	.health-list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.health-list li {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 0.95rem;
+		color: var(--text-secondary);
+	}
+
+	.health-check-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		flex-shrink: 0;
+		background: rgba(34, 197, 94, 0.15);
+		border-radius: 50%;
+		color: #4ade80;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════
+	   LIFECYCLE TIMELINE
+	═══════════════════════════════════════════════════════════════ */
+	.lifecycle-section {
+		background: var(--bg-primary);
+	}
+
+	.timeline {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		max-width: 600px;
+		margin: 0 auto;
+		gap: 0;
+	}
+
+	.timeline-item {
+		display: flex;
+		align-items: flex-start;
+		gap: 1.5rem;
+		width: 100%;
+	}
+
+	.timeline-node {
+		width: 40px;
+		height: 40px;
+		flex-shrink: 0;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		z-index: 1;
+	}
+
+	.node-core {
+		background: rgba(0, 212, 255, 0.12);
+		border: 1px solid rgba(0, 212, 255, 0.25);
+		color: var(--accent-cyan);
+	}
+
+	.node-plugin {
+		background: rgba(139, 92, 246, 0.12);
+		border: 1px solid rgba(139, 92, 246, 0.25);
+		color: var(--accent-purple);
+	}
+
+	.timeline-content {
+		padding: 0.25rem 0 1.75rem 0;
+		flex: 1;
+	}
+
+	.timeline-content h4 {
+		font-size: 1rem;
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: 0.35rem;
+	}
+
+	.timeline-content h4 code {
+		font-family: var(--font-mono);
+		font-size: 0.9em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	.timeline-content p {
+		font-size: 0.9rem;
+		color: var(--text-secondary);
+		line-height: 1.6;
+	}
+
+	.timeline-content p code {
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	.timeline-connector {
+		width: 2px;
+		height: 24px;
+		background: linear-gradient(180deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.3));
+		margin-left: 19px;
+	}
+
+	.timeline-connector-plugin {
+		background: linear-gradient(180deg, rgba(0, 212, 255, 0.3), rgba(139, 92, 246, 0.3));
+	}
+
+	/* ═══════════════════════════════════════════════════════════════
+	   EVENTS
+	═══════════════════════════════════════════════════════════════ */
+	.events-section {
+		background: linear-gradient(180deg, var(--bg-primary), var(--bg-secondary));
+	}
+
+	.events-grid {
+		display: grid;
+		grid-template-columns: 1.1fr 1fr;
+		gap: 4rem;
+		align-items: start;
+	}
+
+	.events-code {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.events-topics {
+		position: sticky;
+		top: 6rem;
+	}
+
+	.topics-title {
+		font-size: 1.1rem;
+		font-weight: 700;
+		color: var(--text-primary);
+		margin-bottom: 0.5rem;
+	}
+
+	.topics-desc {
+		font-size: 0.9rem;
+		color: var(--text-secondary);
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+	}
+
+	.topic-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.625rem;
+	}
+
+	.topic-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.75rem 1rem;
+		background: var(--bg-card);
+		border: 1px solid var(--border-card);
+		border-radius: var(--radius-sm);
+		gap: 1rem;
+		transition: border-color var(--transition);
+	}
+
+	.topic-item:hover {
+		border-color: rgba(0, 212, 255, 0.3);
+	}
+
+	.topic-item code {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--accent-cyan);
+		white-space: nowrap;
+	}
+
+	.topic-item span {
+		font-size: 0.82rem;
+		color: var(--text-muted);
+		text-align: right;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════
+	   GET STARTED
+	═══════════════════════════════════════════════════════════════ */
+	.start-section {
+		background: var(--bg-primary);
+	}
+
+	.start-card {
+		position: relative;
+		background: var(--bg-card);
+		border: 1px solid var(--border-card);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		display: grid;
+		grid-template-columns: 1fr 1.2fr;
+		gap: 0;
+		backdrop-filter: blur(8px);
+	}
+
+	.start-glow {
+		position: absolute;
+		width: 400px;
+		height: 400px;
+		background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%);
+		top: -100px;
+		left: -100px;
+		pointer-events: none;
+	}
+
+	.start-content {
+		position: relative;
+		padding: 4rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		justify-content: center;
+	}
+
+	.start-title {
+		font-size: clamp(2rem, 3vw, 2.75rem);
+		font-weight: 800;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		color: var(--text-primary);
+	}
+
+	.start-subtitle {
+		font-size: 1rem;
+		color: var(--text-secondary);
+		line-height: 1.7;
+	}
+
+	.start-subtitle code {
+		font-family: var(--font-mono);
+		font-size: 0.88em;
+		background: rgba(0, 212, 255, 0.1);
+		color: var(--accent-cyan);
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+	}
+
+	.start-actions {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.start-terminal {
+		border-left: 1px solid var(--border-card);
+	}
+
+	.start-terminal .code-panel {
+		border-radius: 0;
+		border: none;
+		height: 100%;
+		box-shadow: none;
+	}
+
+	.start-terminal .code-block {
+		height: 100%;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════
+	   RESPONSIVE
+	═══════════════════════════════════════════════════════════════ */
+	@media (max-width: 1024px) {
+		.hero-container {
+			grid-template-columns: 1fr;
+			gap: 3rem;
+			text-align: center;
+		}
+		.hero-content { align-items: center; }
+		.hero-subtitle { max-width: 100%; }
+		.hero-actions { justify-content: center; }
+
+		.ctx-grid { grid-template-columns: repeat(2, 1fr); }
+		.anatomy-layout { grid-template-columns: 1fr; }
+		.file-tree-panel { position: static; }
+		.health-layout { grid-template-columns: 1fr; gap: 3rem; }
+		.events-grid { grid-template-columns: 1fr; }
+		.events-topics { position: static; }
+		.start-card { grid-template-columns: 1fr; }
+		.start-terminal { border-left: none; border-top: 1px solid var(--border-card); }
+	}
+
+	@media (max-width: 640px) {
+		.hero-title { font-size: 2.25rem; }
+		.ctx-grid { grid-template-columns: 1fr; }
+		.start-content { padding: 2rem; }
+		.timeline { max-width: 100%; }
+	}
+</style>

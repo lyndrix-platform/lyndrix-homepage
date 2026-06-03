@@ -1,3 +1,13 @@
+---
+interface Props {
+	title?: string;
+	description?: string;
+}
+const {
+	title = 'Lyndrix — Build Applications with Plugins',
+	description = 'Lyndrix is a secure, extensible application framework. Drop in a plugin and go — authentication, secrets, event bus, UI, and database are already there.',
+} = Astro.props;
+---
 <!doctype html>
 <html lang="en">
 	<head>
@@ -11,15 +21,15 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="theme-color" content="#0a0e1a" />
-		<title>Lyndrix — Build Applications with Plugins</title>
-		<meta name="description" content="Lyndrix is a secure, extensible application framework. Drop in a plugin and go — authentication, secrets, event bus, UI, and database are already there." />
-		<meta property="og:title" content="Lyndrix — Build Applications with Plugins" />
-		<meta property="og:description" content="Lyndrix is a secure, extensible application framework. Drop in a plugin and go." />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content="https://lyndrix-platform.github.io/" />
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="Lyndrix — Build Applications with Plugins" />
-		<meta name="twitter:description" content="Lyndrix is a secure, extensible application framework." />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
