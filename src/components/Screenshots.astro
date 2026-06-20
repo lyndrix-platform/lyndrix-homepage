@@ -9,6 +9,16 @@ import userProfile from '../assets/lyndrix_screenshots/dark_settings_user_profil
 import systemInfo from '../assets/lyndrix_screenshots/dark_settings_info.png';
 import userRights from '../assets/lyndrix_screenshots/dark_settings_user_rights.png';
 
+// TODO(screenshots): capture and add screenshots for the newer UI surfaces, then
+// uncomment the matching imports + entries below. Suggested files (dark theme,
+// 16:9, saved under src/assets/lyndrix_screenshots/):
+//   - dark_settings_appearance.png     → Theming / Appearance (theme picker, upload)
+//   - dark_swagger_authorize.png       → API docs with the Authorize button
+//   - dark_settings_notifications.png  → Notification routing (per-endpoint providers)
+// import theming from '../assets/lyndrix_screenshots/dark_settings_appearance.png';
+// import swagger from '../assets/lyndrix_screenshots/dark_swagger_authorize.png';
+// import notifications from '../assets/lyndrix_screenshots/dark_settings_notifications.png';
+
 const screenshots = [
 	{ src: dashboard.src, label: 'Dashboard' },
 	{ src: login.src, label: 'Login' },
@@ -19,6 +29,10 @@ const screenshots = [
 	{ src: userProfile.src, label: 'User Profile' },
 	{ src: systemInfo.src, label: 'System Info' },
 	{ src: userRights.src, label: 'User Rights' },
+	// TODO(screenshots): uncomment once the images above exist.
+	// { src: theming.src, label: 'Theming' },
+	// { src: swagger.src, label: 'API & Swagger' },
+	// { src: notifications.src, label: 'Notifications' },
 ];
 ---
 

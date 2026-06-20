@@ -30,6 +30,21 @@ const features = [
 		title: 'Managed Dependencies',
 		description: 'Each plugin gets its own <code>vendor/</code> directory. No conflicts, no pollution, no dependency hell. Plugins are isolated by design.',
 	},
+	{
+		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>`,
+		title: 'Messaging Gateway',
+		description: 'Two-way messaging through pluggable provider adapters — Discord, Slack, and more. Emit <code>messaging:outbound</code> once; interactive replies route back to your plugin.',
+	},
+	{
+		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2a10 10 0 100 20 2.5 2.5 0 002-4 2.5 2.5 0 012-4h2a4 4 0 004-4 10 10 0 00-10-8z"/></svg>`,
+		title: 'Theming Engine',
+		description: 'Token + component themes drive the whole UI. Ship a custom theme as two JSON files, or scope <code>register_theme_overrides</code> to just your plugin.',
+	},
+	{
+		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
+		title: 'API Keys & Permissions',
+		description: 'Guard plugin endpoints with <code>require_permission()</code>. A system key for machine-to-machine access, per-user API keys with scopes, and a Swagger Authorize button.',
+	},
 ];
 ---
 

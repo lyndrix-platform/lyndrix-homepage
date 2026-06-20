@@ -144,8 +144,38 @@ manifest = ModuleManifest(
 					</div>
 					<div class="ctx-body">
 						<h3>Notifications</h3>
-						<p>Send real-time in-app toasts and persistent bell notifications with a single call.</p>
-						<code>ctx.notify("msg", type="info")</code>
+						<p>Declare notification endpoints; the router decides per endpoint whether they go to in-app toasts, external providers, or both.</p>
+						<code>ctx.notify("deploy_done")</code>
+					</div>
+				</div>
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>Messaging Gateway</h3>
+						<p>Ship a provider adapter (Discord, Slack, …) for two-way messaging with interactive, correlated replies.</p>
+						<code>ctx.register_gateway_adapter(a)</code>
+					</div>
+				</div>
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2a10 10 0 100 20 2.5 2.5 0 002-4 2.5 2.5 0 012-4h2a4 4 0 004-4 10 10 0 00-10-8z"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>Theming</h3>
+						<p>Use platform style tokens, and scope your own overrides without affecting the global theme.</p>
+						<code>ctx.register_theme_overrides(o)</code>
+					</div>
+				</div>
+				<div class="ctx-card">
+					<div class="ctx-icon">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3"/></svg>
+					</div>
+					<div class="ctx-body">
+						<h3>API Auth</h3>
+						<p>Guard your HTTP endpoints with the platform's API keys and permission system.</p>
+						<code>Depends(require_permission(...))</code>
 					</div>
 				</div>
 				<div class="ctx-card">

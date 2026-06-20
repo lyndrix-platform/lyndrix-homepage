@@ -1,49 +1,53 @@
 ---
 const plugins = [
 	{
-		name: 'lyndrix-plugin-iac-orchestrator',
-		description: 'Infrastructure as Code orchestration and Terraform/Ansible assignment management.',
+		name: 'IaC Orchestrator',
+		repo: 'lyndrix-plugin-iac-orchestrator',
+		description: 'GitOps controller for Terraform and Ansible pipelines — webhook triggers, drift detection, and parallel provisioning.',
 		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-iac-orchestrator',
+		docs: 'https://iac-orchestrator.docs.lyndrix.eu',
 	},
 	{
-		name: 'lyndrix-plugin-docker-manager',
-		description: 'Docker container and image management directly from the Lyndrix dashboard.',
-		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-docker-manager',
-	},
-	{
-		name: 'lyndrix-plugin-monitoring',
-		description: 'System and service monitoring with real-time metrics and alerting.',
-		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-monitoring',
-	},
-	{
-		name: 'lyndrix-plugin-server-manager',
-		description: 'Server lifecycle and inventory management for your infrastructure.',
+		name: 'Server Manager',
+		repo: 'lyndrix-plugin-server-manager',
+		description: 'Central server inventory built on configurable hardware catalogs, combination rules, and event-bus hooks.',
 		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-server-manager',
+		docs: 'https://server-manager.docs.lyndrix.eu',
 	},
 	{
-		name: 'lyndrix-plugin-external-services',
-		description: 'External service integrations — connect third-party APIs to your Lyndrix instance.',
+		name: 'Docker Manager',
+		repo: 'lyndrix-plugin-docker-manager',
+		description: 'Docker monitoring with runtime controls — start/stop/restart/logs/shell — through the core sockets layer.',
+		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-docker-manager',
+		docs: 'https://docker-manager.docs.lyndrix.eu',
+	},
+	{
+		name: 'State Monitoring',
+		repo: 'lyndrix-plugin-monitoring',
+		description: 'Native infrastructure and service monitoring with persistent, grouped status timelines and inventory sync.',
+		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-monitoring',
+		docs: 'https://monitoring.docs.lyndrix.eu',
+	},
+	{
+		name: 'External Services',
+		repo: 'lyndrix-plugin-external-services',
+		description: 'Embed external web UIs (Home Assistant, Grafana, …) as full-screen iframes via a managed service registry.',
 		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-external-services',
+		docs: 'https://external-services.docs.lyndrix.eu',
 	},
 	{
-		name: 'lyndrix-plugin-discord-notifier',
-		description: 'Discord notification delivery for alerts, events, and workflow updates.',
+		name: 'Discord Notifier',
+		repo: 'lyndrix-plugin-discord-notifier',
+		description: 'Two-way Discord integration (bot API + webhook) as a Messaging Gateway adapter, with multiple channel instances.',
 		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-discord-notifier',
+		docs: 'https://discord-notifier.docs.lyndrix.eu',
 	},
 	{
-		name: 'lyndrix-plugin-meeting-bingo',
-		description: 'Meeting Bingo — a fun plugin proving that Lyndrix works for any use case.',
+		name: 'Meeting Bingo',
+		repo: 'lyndrix-plugin-meeting-bingo',
+		description: 'Multiplayer bullshit-bingo for long meetings — a reference plugin proving Lyndrix fits any use case.',
 		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-meeting-bingo',
-	},
-	{
-		name: 'lyndrix-plugin-collection',
-		description: 'The official plugin collection index — browse all available Lyndrix plugins.',
-		url: 'https://github.com/lyndrix-platform/lyndrix-plugin-collection',
-	},
-	{
-		name: 'aac-template-engine',
-		description: 'Application as Code template engine for declarative app configuration.',
-		url: 'https://github.com/lyndrix-platform/aac-template-engine',
+		docs: 'https://meeting-bingo.docs.lyndrix.eu',
 	},
 ];
 ---
@@ -54,13 +58,13 @@ const plugins = [
 			<span class="section-tag">Ecosystem</span>
 			<h2 class="section-title">Plugin Ecosystem</h2>
 			<p class="section-subtitle">
-				Lyndrix ships with a growing library of official plugins. Any developer can publish their own.
+				Lyndrix ships with a growing library of official plugins, each with its own docs site. Any developer can publish their own.
 			</p>
 		</div>
 
 		<div class="plugins-grid">
 			{plugins.map((plugin) => (
-				<a href={plugin.url} class="plugin-card" target="_blank" rel="noopener noreferrer">
+				<div class="plugin-card">
 					<div class="plugin-header">
 						<div class="plugin-icon">
 							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -75,16 +79,27 @@ const plugins = [
 						</span>
 					</div>
 					<div class="plugin-name">{plugin.name}</div>
+					<div class="plugin-repo">{plugin.repo}</div>
 					<p class="plugin-description">{plugin.description}</p>
-					<div class="plugin-link">
-						View on GitHub
-						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-							<polyline points="15 3 21 3 21 9"/>
-							<line x1="10" y1="14" x2="21" y2="3"/>
-						</svg>
+					<div class="plugin-links">
+						<a href={plugin.docs} class="plugin-link" target="_blank" rel="noopener noreferrer">
+							Docs
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+								<polyline points="15 3 21 3 21 9"/>
+								<line x1="10" y1="14" x2="21" y2="3"/>
+							</svg>
+						</a>
+						<a href={plugin.url} class="plugin-link plugin-link-muted" target="_blank" rel="noopener noreferrer">
+							GitHub
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+								<polyline points="15 3 21 3 21 9"/>
+								<line x1="10" y1="14" x2="21" y2="3"/>
+							</svg>
+						</a>
 					</div>
-				</a>
+				</div>
 			))}
 		</div>
 
@@ -94,7 +109,10 @@ const plugins = [
 				<line x1="12" y1="8" x2="12" y2="12"/>
 				<line x1="12" y1="16" x2="12.01" y2="16"/>
 			</svg>
-			Want to build your own? →&nbsp;
+			<a href="https://github.com/lyndrix-platform/lyndrix-plugin-collection" target="_blank" rel="noopener noreferrer">
+				Browse all plugins
+			</a>
+			&nbsp;·&nbsp;Want to build your own? →&nbsp;
 			<a href="https://docs.lyndrix.eu/plugins/" target="_blank" rel="noopener noreferrer">
 				Read the Plugin Development Guide
 			</a>
@@ -220,11 +238,19 @@ const plugins = [
 	}
 
 	.plugin-name {
-		font-size: 0.88rem;
+		font-size: 1rem;
 		font-weight: 700;
 		color: var(--text-primary);
+		letter-spacing: -0.01em;
+	}
+
+	.plugin-repo {
+		font-size: 0.74rem;
+		color: var(--text-secondary);
 		font-family: var(--font-mono);
 		word-break: break-all;
+		opacity: 0.7;
+		margin-top: -0.4rem;
 	}
 
 	.plugin-description {
@@ -234,6 +260,13 @@ const plugins = [
 		flex: 1;
 	}
 
+	.plugin-links {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		margin-top: auto;
+	}
+
 	.plugin-link {
 		display: flex;
 		align-items: center;
@@ -241,7 +274,15 @@ const plugins = [
 		font-size: 0.82rem;
 		font-weight: 600;
 		color: var(--accent-cyan);
-		margin-top: auto;
+		text-decoration: none;
+	}
+
+	.plugin-link:hover {
+		color: var(--text-primary);
+	}
+
+	.plugin-link-muted {
+		color: var(--text-secondary);
 	}
 
 	.eco-banner {
