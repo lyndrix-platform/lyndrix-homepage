@@ -1,5 +1,5 @@
 ---
-import logo from '../assets/lyndrid_icons/icons/logo.svg';
+import logo from '../assets/lyndrix_icons/icons/logo.svg';
 ---
 
 <nav class="navbar" id="navbar">
@@ -51,15 +51,21 @@ import logo from '../assets/lyndrid_icons/icons/logo.svg';
 		});
 	});
 
-	// Sticky style on scroll
+	// Sticky style on scroll — passive listener, coalesced via rAF to avoid per-frame work.
 	const navbar = document.getElementById('navbar');
-	window.addEventListener('scroll', () => {
-		if (window.scrollY > 20) {
-			navbar?.classList.add('scrolled');
-		} else {
-			navbar?.classList.remove('scrolled');
-		}
-	});
+	let scrollTicking = false;
+	window.addEventListener(
+		'scroll',
+		() => {
+			if (scrollTicking) return;
+			scrollTicking = true;
+			requestAnimationFrame(() => {
+				navbar?.classList.toggle('scrolled', window.scrollY > 20);
+				scrollTicking = false;
+			});
+		},
+		{ passive: true },
+	);
 </script>
 
 <style>

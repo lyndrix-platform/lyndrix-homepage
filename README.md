@@ -1,46 +1,52 @@
-# Astro Starter Kit: Basics
+# lyndrix-homepage
 
-```sh
-npm create astro@latest -- --template basics
-```
+The public marketing/info site for the **Lyndrix** application platform
+(<https://lyndrix.eu>). It is a static [Astro](https://astro.build) site built to
+plain HTML/CSS/JS and deployed to Cloudflare as static assets served by a thin
+Worker (`worker.js` + `wrangler.jsonc`).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+There is no backend, no client framework, and no runtime third-party CDN
+dependency — fonts fall back to the locally-installed JetBrains Mono Nerd Font
+and then `system-ui`.
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Project structure
 
 ```text
 /
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+├── public/                 # static files copied verbatim (favicons, manifest)
+├── src/
+│   ├── assets/             # images, logos, screenshots (processed by Astro)
+│   ├── components/         # page sections (Hero, Features, Screenshots, …)
+│   ├── layouts/
+│   │   └── Layout.astro    # shared <head>, global CSS variables/reset
+│   └── pages/
+│       ├── index.astro     # landing page
+│       └── plugins.astro   # plugin overview page
+├── worker.js               # Cloudflare Worker: forwards requests to ASSETS
+├── wrangler.jsonc          # Cloudflare deploy config (serves ./dist)
+└── astro.config.mjs
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Commands
 
-## 🧞 Commands
+All commands run from the repo root:
 
-All commands are run from the root of the project, from a terminal:
+| Command           | Action                                       |
+| :---------------- | :------------------------------------------- |
+| `npm install`     | Install dependencies                         |
+| `npm run dev`     | Start the dev server at `localhost:4321`     |
+| `npm run build`   | Build the production site to `./dist/`       |
+| `npm run preview` | Preview the production build locally         |
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Build caveat (WSL / Node 22)
 
-## 👀 Want to learn more?
+On some WSL setups the bundled Node binary ships without the executable bit, so
+`astro build` fails to spawn. The workaround (a Node loader shim) is documented in
+`.claude/skills/run-lyndrix-homepage/SKILL.md` — use that skill to build/run the
+site in this environment.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Deployment
+
+`npm run build` emits static assets to `./dist/`, which the Cloudflare Worker
+(`worker.js`) serves via its `ASSETS` binding (`wrangler.jsonc`). Deploy with
+`wrangler deploy`.

@@ -26,13 +26,15 @@ const {
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://lyndrix-platform.github.io/" />
+		<meta property="og:url" content="https://lyndrix.eu/" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		{/* No runtime web fonts: production must work offline / without third-party CDNs.
+		    The --font-sans / --font-mono stacks fall back to locally-installed JetBrains
+		    Mono Nerd Font and then system-ui.
+		    TODO(agent): if web-font fidelity is required, self-host via @fontsource/jetbrains-mono
+		    (npm i @fontsource/jetbrains-mono) and import it here instead of a CDN <link>. */}
 	</head>
 	<body>
 		<slot />
