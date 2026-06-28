@@ -8,7 +8,7 @@ const steps = [
 	{
 		number: '02',
 		title: 'Write Your Plugin',
-		description: 'Create <code>entrypoint.py</code> with a <code>manifest</code> and <code>setup(ctx)</code> function. Import from <code>core.api</code>. That\'s the entire contract.',
+		description: 'Create <code>entrypoint.py</code> with a <code>manifest</code> and <code>setup(ctx)</code>. Choose React (<code>react_ui=True</code>), NiceGUI pages, or both. Import from <code>core.api</code> — that\'s the entire contract.',
 	},
 	{
 		number: '03',
@@ -23,7 +23,6 @@ const steps = [
 ];
 
 const codeSnippet = `from core.api import ModuleManifest
-from nicegui import ui
 
 manifest = ModuleManifest(
     id="lyndrix.plugin.myapp",
@@ -31,16 +30,20 @@ manifest = ModuleManifest(
     version="1.0.0",
     type="PLUGIN",
     ui_route="/myapp",
+    react_ui=True,         # serve Vite bundle from app/ui/static/
+    i18n_namespace="myapp",# register locales/ with the i18n catalog
     permissions={
-        "subscribe": ["system:boot_complete"],
-        "emit": [],
+        "subscribe": ["db:connected"],
+        "emit": ["myapp:event"],
     },
 )
 
-async def setup(ctx):
-    @ui.page('/myapp')
-    async def page():
-        ui.label('Hello from my plugin!')`;
+def setup(ctx):
+    from .app.api import build_plugin_router
+    ctx.register_routes(build_plugin_router())  # API-first
+    # Optional: NiceGUI fallback page
+    # @ui.page('/myapp')
+    # async def _page(): ...`;
 ---
 
 <section class="how-it-works" id="how-it-works">

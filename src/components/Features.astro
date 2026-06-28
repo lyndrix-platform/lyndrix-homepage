@@ -22,8 +22,8 @@ const features = [
 	},
 	{
 		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
-		title: 'Live Dashboard & UI',
-		description: 'NiceGUI-powered frontend with plugin-contributed widgets and settings panels. Your plugin\'s UI is part of the platform — no separate deployment.',
+		title: 'Dual-Engine UI',
+		description: 'Ship a React frontend (module federation, i18next, shared component library) or a NiceGUI page — or both. Set <code>react_ui=True</code> in your manifest and the core serves your Vite bundle alongside the REST API.',
 	},
 	{
 		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`,
@@ -44,6 +44,11 @@ const features = [
 		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
 		title: 'API Keys & Permissions',
 		description: 'Guard plugin endpoints with <code>require_permission()</code>. A system key for machine-to-machine access, per-user API keys with scopes, and a Swagger Authorize button.',
+	},
+	{
+		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>`,
+		title: 'Internationalisation',
+		description: 'An HTTP i18n catalog serves i18next-shaped bundles to React frontends (<code>GET /api/i18n/{locale}</code>). Plugins register their own namespace; the version fingerprint keeps clients cache-coherent across deployments.',
 	},
 ];
 ---
