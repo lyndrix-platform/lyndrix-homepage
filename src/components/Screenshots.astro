@@ -1,4 +1,15 @@
 ---
+// --- New React UI (primary) ---
+import reactDashboard from '../assets/lyndrix_screenshots/react_dashboard.png';
+import reactPlugins from '../assets/lyndrix_screenshots/react_plugins.png';
+import reactUsers from '../assets/lyndrix_screenshots/react_users.png';
+import reactAppearance from '../assets/lyndrix_screenshots/react_appearance.png';
+import reactMonitoring from '../assets/lyndrix_screenshots/react_monitoring.png';
+import reactIac from '../assets/lyndrix_screenshots/react_iac.png';
+import reactDocker from '../assets/lyndrix_screenshots/react_docker.png';
+import reactSettings from '../assets/lyndrix_screenshots/react_settings.png';
+
+// --- Classic NiceGUI UI (secondary) ---
 import dashboard from '../assets/lyndrix_screenshots/dark_dashboard.png';
 import login from '../assets/lyndrix_screenshots/dark_login_screen.png';
 import pluginManager from '../assets/lyndrix_screenshots/dark_plugin_manager.png';
@@ -9,31 +20,43 @@ import userProfile from '../assets/lyndrix_screenshots/dark_settings_user_profil
 import systemInfo from '../assets/lyndrix_screenshots/dark_settings_info.png';
 import userRights from '../assets/lyndrix_screenshots/dark_settings_user_rights.png';
 
-// TODO(screenshots): capture and add screenshots for the newer UI surfaces, then
-// uncomment the matching imports + entries below. Suggested files (dark theme,
-// 16:9, saved under src/assets/lyndrix_screenshots/):
-//   - dark_settings_appearance.png     → Theming / Appearance (theme picker, upload)
-//   - dark_swagger_authorize.png       → API docs with the Authorize button
-//   - dark_settings_notifications.png  → Notification routing (per-endpoint providers)
-// import theming from '../assets/lyndrix_screenshots/dark_settings_appearance.png';
-// import swagger from '../assets/lyndrix_screenshots/dark_swagger_authorize.png';
-// import notifications from '../assets/lyndrix_screenshots/dark_settings_notifications.png';
-
-const screenshots = [
-	{ src: dashboard.src, label: 'Dashboard' },
-	{ src: login.src, label: 'Login' },
-	{ src: pluginManager.src, label: 'Plugin Manager' },
-	{ src: iacOrchestrator.src, label: 'IaC Orchestrator Plugin' },
-	{ src: authProvider.src, label: 'Auth Providers' },
-	{ src: systemSettings.src, label: 'System Settings' },
-	{ src: userProfile.src, label: 'User Profile' },
-	{ src: systemInfo.src, label: 'System Info' },
-	{ src: userRights.src, label: 'User Rights' },
-	// TODO(screenshots): uncomment once the images above exist.
-	// { src: theming.src, label: 'Theming' },
-	// { src: swagger.src, label: 'API & Swagger' },
-	// { src: notifications.src, label: 'Notifications' },
+// Two UI sets. The React UI is the default/primary set; the Classic NiceGUI
+// shots stay available behind the switcher.
+const uiSets = [
+	{
+		id: 'react',
+		label: 'React UI',
+		badge: 'New',
+		shots: [
+			{ src: reactDashboard.src, label: 'Dashboard', path: 'dashboard' },
+			{ src: reactPlugins.src, label: 'Plugins', path: 'plugins' },
+			{ src: reactMonitoring.src, label: 'State Monitoring', path: 'apps/monitoring' },
+			{ src: reactDocker.src, label: 'Docker Manager', path: 'apps/docker' },
+			{ src: reactIac.src, label: 'IaC Orchestrator', path: 'apps/iac' },
+			{ src: reactUsers.src, label: 'Users', path: 'users' },
+			{ src: reactAppearance.src, label: 'Appearance', path: 'settings/appearance' },
+			{ src: reactSettings.src, label: 'Settings', path: 'settings' },
+		],
+	},
+	{
+		id: 'classic',
+		label: 'Classic UI',
+		badge: null,
+		shots: [
+			{ src: dashboard.src, label: 'Dashboard', path: 'dashboard' },
+			{ src: login.src, label: 'Login', path: 'login' },
+			{ src: pluginManager.src, label: 'Plugin Manager', path: 'plugins' },
+			{ src: iacOrchestrator.src, label: 'IaC Orchestrator', path: 'apps/iac' },
+			{ src: authProvider.src, label: 'Auth Providers', path: 'settings/auth' },
+			{ src: systemSettings.src, label: 'System Settings', path: 'settings/system' },
+			{ src: userProfile.src, label: 'User Profile', path: 'settings/profile' },
+			{ src: systemInfo.src, label: 'System Info', path: 'settings/info' },
+			{ src: userRights.src, label: 'User Rights', path: 'users/rights' },
+		],
+	},
 ];
+
+const initial = uiSets[0];
 ---
 
 <section class="screenshots" id="screenshots">
@@ -42,24 +65,26 @@ const screenshots = [
 			<span class="section-tag">Screenshots</span>
 			<h2 class="section-title">See it in action</h2>
 			<p class="section-subtitle">
-				A fully managed platform with a polished dark-mode UI — ready out of the box.
+				A polished, fully managed platform — now with a glassy React interface, and the
+				classic NiceGUI dashboard still one click away.
 			</p>
 		</div>
 
-		<div class="tabs-row" id="tab-row" role="tablist">
-			{screenshots.map((shot, i) => (
+		<div class="ui-switch" role="tablist" aria-label="Interface">
+			{uiSets.map((set, i) => (
 				<button
-					class={`tab-btn${i === 0 ? ' active' : ''}`}
-					data-index={i}
+					class={`ui-switch-btn${i === 0 ? ' active' : ''}`}
+					data-set={set.id}
 					role="tab"
 					aria-selected={i === 0 ? 'true' : 'false'}
-					aria-controls={`panel-${i}`}
-					id={`tab-${i}`}
 				>
-					{shot.label}
+					{set.label}
+					{set.badge && <span class="ui-switch-badge">{set.badge}</span>}
 				</button>
 			))}
 		</div>
+
+		<div class="tabs-row" id="tab-row" role="tablist"></div>
 
 		<div class="preview-frame" id="preview-frame" role="tabpanel">
 			<div class="browser-bar">
@@ -68,84 +93,105 @@ const screenshots = [
 					<span class="dot dot-yellow"></span>
 					<span class="dot dot-green"></span>
 				</div>
-				<div class="browser-url" id="preview-url">lyndrix.local/dashboard</div>
+				<div class="browser-url" id="preview-url">lyndrix.local/{initial.shots[0].path}</div>
 			</div>
 			<div class="preview-img-wrap">
-				<img id="preview-img" src={screenshots[0].src} alt={screenshots[0].label} loading="lazy" />
+				<img id="preview-img" src={initial.shots[0].src} alt={initial.shots[0].label} loading="lazy" />
 			</div>
 		</div>
 
-		<div class="thumb-grid">
-			{screenshots.map((shot, i) => (
-				<button
-					class={`thumb-btn${i === 0 ? ' active' : ''}`}
-					data-index={i}
-					aria-label={`View ${shot.label} screenshot`}
-				>
-					<img src={shot.src} alt={shot.label} loading="lazy" />
-					<span class="thumb-label">{shot.label}</span>
-				</button>
-			))}
-		</div>
+		<div class="thumb-grid" id="thumb-grid"></div>
 	</div>
+
+	<script type="application/json" id="ui-sets-data" set:html={JSON.stringify(uiSets)}></script>
 </section>
 
 <script>
-	const srcs: string[] = [];
-	const labels: string[] = [];
+	type Shot = { src: string; label: string; path: string };
+	type UiSet = { id: string; label: string; badge: string | null; shots: Shot[] };
 
-	document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach((btn) => {
-		const idx = Number(btn.dataset.index);
-		const img = document.querySelector<HTMLImageElement>('.thumb-btn[data-index="' + idx + '"] img');
-		if (img) {
-			srcs[idx] = img.src;
-			labels[idx] = btn.textContent?.trim() ?? '';
-		}
-	});
+	const dataEl = document.getElementById('ui-sets-data');
+	const uiSets: UiSet[] = dataEl ? JSON.parse(dataEl.textContent ?? '[]') : [];
 
-	// Also collect from thumbs directly
-	document.querySelectorAll<HTMLButtonElement>('.thumb-btn').forEach((btn) => {
-		const idx = Number(btn.dataset.index);
-		const img = btn.querySelector<HTMLImageElement>('img');
-		if (img) srcs[idx] = img.src;
-	});
-
-	// Collect preview src from server-rendered
+	const tabRow = document.getElementById('tab-row');
+	const thumbGrid = document.getElementById('thumb-grid');
 	const previewImg = document.getElementById('preview-img') as HTMLImageElement | null;
-	if (previewImg && !srcs[0]) srcs[0] = previewImg.src;
+	const previewUrl = document.getElementById('preview-url');
 
-	function activate(index: number) {
-		// Update tab buttons
-		document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach((btn) => {
+	let activeSet = uiSets[0];
+	let activeIndex = 0;
+
+	function selectShot(index: number) {
+		if (!activeSet) return;
+		activeIndex = index;
+		const shot = activeSet.shots[index];
+		if (!shot) return;
+
+		if (previewImg) {
+			previewImg.src = shot.src;
+			previewImg.alt = shot.label;
+		}
+		if (previewUrl) previewUrl.textContent = 'lyndrix.local/' + shot.path;
+
+		tabRow?.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach((btn) => {
 			const active = Number(btn.dataset.index) === index;
 			btn.classList.toggle('active', active);
 			btn.setAttribute('aria-selected', String(active));
 		});
-
-		// Update thumb buttons
-		document.querySelectorAll<HTMLButtonElement>('.thumb-btn').forEach((btn) => {
+		thumbGrid?.querySelectorAll<HTMLButtonElement>('.thumb-btn').forEach((btn) => {
 			btn.classList.toggle('active', Number(btn.dataset.index) === index);
 		});
-
-		// Update preview
-		if (previewImg) {
-			previewImg.src = srcs[index] ?? '';
-			previewImg.alt = labels[index] ?? '';
-		}
-
-		const urlEl = document.getElementById('preview-url');
-		if (urlEl) {
-			urlEl.textContent = 'lyndrix.local/' + (labels[index] ?? '').toLowerCase().replace(/\s+/g, '-');
-		}
 	}
 
-	document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach((btn) => {
-		btn.addEventListener('click', () => activate(Number(btn.dataset.index)));
+	function renderSet(set: UiSet) {
+		activeSet = set;
+		if (tabRow) tabRow.innerHTML = '';
+		if (thumbGrid) thumbGrid.innerHTML = '';
+
+		set.shots.forEach((shot, i) => {
+			const tab = document.createElement('button');
+			tab.className = 'tab-btn' + (i === 0 ? ' active' : '');
+			tab.dataset.index = String(i);
+			tab.setAttribute('role', 'tab');
+			tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+			tab.textContent = shot.label;
+			tab.addEventListener('click', () => selectShot(i));
+			tabRow?.appendChild(tab);
+
+			const thumb = document.createElement('button');
+			thumb.className = 'thumb-btn' + (i === 0 ? ' active' : '');
+			thumb.dataset.index = String(i);
+			thumb.setAttribute('aria-label', 'View ' + shot.label + ' screenshot');
+			const img = document.createElement('img');
+			img.src = shot.src;
+			img.alt = shot.label;
+			img.loading = 'lazy';
+			const cap = document.createElement('span');
+			cap.className = 'thumb-label';
+			cap.textContent = shot.label;
+			thumb.appendChild(img);
+			thumb.appendChild(cap);
+			thumb.addEventListener('click', () => selectShot(i));
+			thumbGrid?.appendChild(thumb);
+		});
+
+		selectShot(0);
+	}
+
+	document.querySelectorAll<HTMLButtonElement>('.ui-switch-btn').forEach((btn) => {
+		btn.addEventListener('click', () => {
+			const set = uiSets.find((s) => s.id === btn.dataset.set);
+			if (!set) return;
+			document.querySelectorAll<HTMLButtonElement>('.ui-switch-btn').forEach((b) => {
+				const active = b === btn;
+				b.classList.toggle('active', active);
+				b.setAttribute('aria-selected', String(active));
+			});
+			renderSet(set);
+		});
 	});
 
-	document.querySelectorAll<HTMLButtonElement>('.thumb-btn').forEach((btn) => {
-		btn.addEventListener('click', () => activate(Number(btn.dataset.index)));
-	});
+	if (activeSet) renderSet(activeSet);
 </script>
 
 <style>
@@ -194,8 +240,56 @@ const screenshots = [
 	.section-subtitle {
 		font-size: 1.1rem;
 		color: var(--text-secondary);
-		max-width: 560px;
+		max-width: 600px;
 		line-height: 1.7;
+	}
+
+	/* UI set switcher — segmented control */
+	.ui-switch {
+		display: inline-flex;
+		align-self: center;
+		gap: 0.25rem;
+		padding: 0.3rem;
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid var(--border-card);
+		border-radius: 999px;
+	}
+
+	.ui-switch-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1.25rem;
+		background: transparent;
+		border: none;
+		border-radius: 999px;
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--text-secondary);
+		cursor: pointer;
+		transition: all var(--transition);
+		font-family: var(--font-sans);
+	}
+
+	.ui-switch-btn:hover {
+		color: var(--text-primary);
+	}
+
+	.ui-switch-btn.active {
+		background: linear-gradient(135deg, rgba(0, 212, 255, 0.18), rgba(0, 212, 255, 0.08));
+		color: var(--accent-cyan);
+		box-shadow: 0 0 16px rgba(0, 212, 255, 0.18);
+	}
+
+	.ui-switch-badge {
+		font-size: 0.62rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		padding: 0.1rem 0.4rem;
+		border-radius: 999px;
+		background: var(--accent-cyan);
+		color: #03121a;
 	}
 
 	.tabs-row {
@@ -274,15 +368,15 @@ const screenshots = [
 
 	.preview-img-wrap {
 		width: 100%;
-		aspect-ratio: 16 / 9;
 		overflow: hidden;
+		background: #0d1117;
 	}
 
+	/* Show the full screenshot at its natural ratio — no cropping, so the
+	   sidebar/edges of each UI stay intact regardless of capture aspect. */
 	.preview-img-wrap img {
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: top;
+		height: auto;
 		display: block;
 		transition: opacity 0.2s ease;
 	}
